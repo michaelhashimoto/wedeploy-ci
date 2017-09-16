@@ -26,6 +26,7 @@ repositories {
 }
 
 dependencies {
+	compile("org.json:json")
 	compile("org.springframework.boot:spring-boot-starter-thymeleaf")
 }
 
