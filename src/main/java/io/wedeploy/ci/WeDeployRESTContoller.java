@@ -12,21 +12,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Controller
-@EnableAutoConfiguration
+import java.util.concurrent.atomic.AtomicLong;
+
 @RestController
-public class WeDeployCIController {
+class WeDeployRESTContoller {
+	@GetMapping("/master")
+	public String master(@RequestParam("name") String name) {
+		Master master = new Master(name);
 
-	public WeDeployCIController() {
+		return master.toJSONString();
 	}
-
-	public static void main(String[] args) {
-		SpringApplication.run(WeDeployCIController.class, args);
-	}
-
-	@RequestMapping("/")
-	public ModelAndView hello() {
-		return new ModelAndView("layout");
-	}
-
 }
