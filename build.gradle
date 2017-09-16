@@ -1,4 +1,4 @@
-group 'io.wedeploy.example'
+group 'io.wedeploy.ci'
 version '1.0-SNAPSHOT'
 
 buildscript {
@@ -13,7 +13,7 @@ buildscript {
 }
 
 apply plugin: 'java'
-apply plugin: 'org.springframework.boot.gradle.plugin.SpringBootPlugin'
+apply plugin: org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 task run(dependsOn: ':bootRun') << {
 		println 'Boot'
