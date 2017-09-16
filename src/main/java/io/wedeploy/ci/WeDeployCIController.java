@@ -8,8 +8,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 @Controller
 @EnableAutoConfiguration
+@RestController
 public class WeDeployCIController {
 
 	public WeDeployCIController() {
@@ -24,7 +29,7 @@ public class WeDeployCIController {
 		return new ModelAndView("layout");
 	}
 
-	@RequestMapping("/master")
+	@GetMapping("/master")
 	public String masters() {
 		Master master = new Master("test-1-0");
 
