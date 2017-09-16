@@ -8,13 +8,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @EnableAutoConfiguration
-public class WeDeployController {
+public class WeDeployCIController {
 
-	public WeDeployController() {
+	public WeDeployCIController() {
 	}
 
 	public static void main(String[] args) {
-		SpringApplication.run(WeDeployController.class, args);
+		SpringApplication.run(WeDeployCIController.class, args);
 	}
 
 	@RequestMapping("/")
