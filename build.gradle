@@ -30,6 +30,7 @@ repositories {
 }
 
 dependencies {
+	compile "commons-codec:commons-codec:1.10"
 	compile "org.json:json:20170516"
 	compile "org.springframework.boot:spring-boot-starter-web"
 }

@@ -2,6 +2,8 @@ package io.wedeploy.ci.jenkins.node;
 
 import io.wedeploy.ci.util.EnvironmentUtil;
 
+import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +12,7 @@ import org.json.JSONObject;
 
 public class JenkinsMasters {
 
-	public JenkinsMasters() {
+	public JenkinsMasters() throws IOException {
 		String[] jenkinsMasterHostnames = _JENKINS_MASTER_HOSTNAMES.split(",");
 
 		for (String jenkinsMasterHostname : jenkinsMasterHostnames) {
@@ -19,13 +21,17 @@ public class JenkinsMasters {
 	}
 
 	public String toString() {
+		JSONObject jsonObject = new JSONObject();
+
 		JSONArray jsonArray = new JSONArray();
 
 		for (JenkinsMaster jenkinsMaster : _jenkinsMasters) {
 			jsonArray.put(jenkinsMaster.toJSONObject());
 		}
 
-		return jsonArray.toString();
+		jsonObject.put("masters", jsonArray);
+
+		return jsonObject.toString();
 	}
 
 	private List<JenkinsMaster> _jenkinsMasters = new ArrayList<>();

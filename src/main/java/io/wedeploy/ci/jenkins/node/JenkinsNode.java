@@ -10,12 +10,6 @@ public abstract class JenkinsNode {
 		return hostname;
 	}
 
-	public String toString() {
-		JSONObject jsonObject = toJSONObject();
-
-		return jsonObject.toString();
-	}
-
 	protected String hostname;
 	protected String localURL;
 	protected String remoteURL;

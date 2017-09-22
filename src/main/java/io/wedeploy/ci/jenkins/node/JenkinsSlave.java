@@ -4,10 +4,15 @@ import org.json.JSONObject;
 
 public class JenkinsSlave extends JenkinsNode {
 
-	public JenkinsSlave(String hostname) {
+	public JenkinsSlave(String hostname, JenkinsMaster jenkinsMaster) {
 		this.hostname = hostname;
-		this.localURL = "http://" + hostname + "/";
-		this.remoteURL = "https://" + hostname + ".liferay.com/";
+
+		_jenkinsMaster = jenkinsMaster;
+
+		String masterHostname = _jenkinsMaster.getHostname();
+
+		localURL = "http://" + masterHostname + "/computer/" + hostname;
+		remoteURL = "https://" + masterHostname + ".liferay.com/computer/" + hostname;
 	}
 
 	public JSONObject toJSONObject() {
@@ -19,5 +24,7 @@ public class JenkinsSlave extends JenkinsNode {
 
 		return jsonObject;
 	}
+
+	private JenkinsMaster _jenkinsMaster;
 
 }

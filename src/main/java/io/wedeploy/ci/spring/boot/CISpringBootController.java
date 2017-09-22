@@ -3,6 +3,8 @@ package io.wedeploy.ci.spring.boot;
 import io.wedeploy.ci.jenkins.node.JenkinsMasters;
 import io.wedeploy.ci.util.EnvironmentUtil;
 
+import java.io.IOException;
+
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -19,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CISpringBootController {
 
 	@GetMapping("/masters")
-	public String masters() {
+	public String masters() throws IOException {
 		JenkinsMasters jenkinsMasters = new JenkinsMasters();
 
 		return jenkinsMasters.toString();
