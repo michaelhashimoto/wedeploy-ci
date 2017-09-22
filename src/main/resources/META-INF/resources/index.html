@@ -1,0 +1,47 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+		<link href="https://cdn.lfrs.sl/alloyui.com/3.0.1/aui-css/css/bootstrap.min.css" rel="stylesheet" />
+	</head>
+	<body>
+		<h1>Masters</h1>
+
+		<div>
+			<ul id="masters" />
+		</div>
+
+		<script>
+			$(function(){
+				$.getJSON('/masters', function(data) {
+					var masters = data.masters;
+
+					for (var i in masters) {
+						var masterName = masters[i].masterName;
+
+						var masterElement = document.createElement("li");
+						var mastersElement = document.getElementById("masters");
+						var slavesElement = document.createElement("ul");
+
+						masterElement.innerHTML = masterName;
+						masterElement.appendChild(slavesElement);
+
+						mastersElement.appendChild(masterElement);
+
+						var slaves = masters[i].slaves;
+
+						for (var j in slaves) {
+							var slaveName = slaves[j].slaveName;
+
+							var slaveElement = document.createElement("li");
+
+							slaveElement.innerHTML = slaveName;
+
+							slavesElement.appendChild(slaveElement);
+						}
+					}
+				});
+			});
+		</script>
+	</body>
+</html>

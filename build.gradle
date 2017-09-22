@@ -2,34 +2,30 @@ group 'io.wedeploy.ci'
 version '1.0-SNAPSHOT'
 
 buildscript {
+	ext.spring_boot_version = "1.5.4.RELEASE"
+
 	repositories {
-		mavenLocal()
-		mavenCentral()
-		maven { url "http://repo.spring.io/release" }
+		jcenter()
 	}
+
 	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.1.RELEASE")
+		classpath "org.springframework.boot:spring-boot-gradle-plugin:$spring_boot_version"
 	}
 }
 
-apply plugin: 'java'
-apply plugin: org.springframework.boot.gradle.plugin.SpringBootPlugin
+apply plugin: "java"
+apply plugin: "org.springframework.boot"
 
-task run(dependsOn: ':bootRun') << {
-		println 'Boot'
+jar {
+	baseName = "gs-rest-service"
+	version = "0.1.0"
 }
 
 repositories {
-	mavenLocal()
-	mavenCentral()
-	maven { url "http://repo.spring.io/release" }
+	jcenter()
 }
 
 dependencies {
-	compile("org.json:json")
-	compile("org.springframework.boot:spring-boot-starter-thymeleaf")
-}
-
-task wrapper(type: Wrapper) {
-	gradleVersion = '2.12'
+	compile "org.json:json:20170516"
+	compile "org.springframework.boot:spring-boot-starter-web"
 }
