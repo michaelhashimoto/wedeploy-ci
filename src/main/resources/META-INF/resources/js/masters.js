@@ -1,13 +1,21 @@
 $.getJSON('/masters', function(data) {
-	for (var i in data) {
-		var masterName = data[i].masterName;
+	var jenkinsMasters = data;
 
-		var masterElement = document.createElement("li");
-		var mastersElement = document.getElementById("masters");
-		var slavesElement = document.createElement("ul");
+	var mastersElement = document.getElementById("masters");
 
-		masterElement.innerHTML = masterName;
+	for (var i in jenkinsMasters) {
+		var jenkinsMaster = jenkinsMasters[i];
 
-		mastersElement.appendChild(masterElement);
+		var masterHostname = jenkinsMaster.hostname;
+		var masterRemoteURL = jenkinsMaster.remote_url;
+
+		var masterAnchorElement = document.createElement("a");
+		masterAnchorElement.setAttribute("href", masterRemoteURL);
+		masterAnchorElement.innerHTML = masterHostname;
+
+		var masterListItemElement = document.createElement("li");
+		masterListItemElement.appendChild(masterAnchorElement)
+
+		mastersElement.appendChild(masterListItemElement);
 	}
 });
