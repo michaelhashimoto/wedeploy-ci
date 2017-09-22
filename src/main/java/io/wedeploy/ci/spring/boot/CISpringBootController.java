@@ -20,11 +20,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CISpringBootController {
 
+	public CISpringBootController() throws IOException {
+		_jenkinsMasters = new JenkinsMasters();
+	}
+
 	@GetMapping("/masters")
 	public String masters() throws IOException {
-		JenkinsMasters jenkinsMasters = new JenkinsMasters();
-
-		return jenkinsMasters.toString();
+		return _jenkinsMasters.toString();
 	}
+
+	private JenkinsMasters _jenkinsMasters;
 
 }

@@ -1,6 +1,4 @@
 $.getJSON('/masters', function(data) {
-	alert(data);
-
 	var jenkinsMasters = data.masters;
 
 	var mastersElement = document.getElementById("masters");
@@ -19,20 +17,34 @@ $.getJSON('/masters', function(data) {
 		var masterULElement = document.createElement("ul");
 
 		for (var j in masterSlaves) {
-			var slaveListItemElement = document.createElement("li");
-
 			var jenkinsSlave = masterSlaves[j];
 
 			var slaveHostname = jenkinsSlave.hostname;
 			var slaveRemoteURL = jenkinsSlave.remote_url;
+			var slaveOffline = jenkinsSlave.offline;
+			var slaveOfflineCause = jenkinsSlave.offline_cause;
 
-			var slaveAnchorElement = document.createElement("a");
-			slaveAnchorElement.setAttribute("href", slaveRemoteURL);
-			slaveAnchorElement.innerHTML = slaveHostname;
+			if (slaveOffline) {
+				var slaveListItemElement = document.createElement("li");
 
-			slaveListItemElement.appendChild(slaveAnchorElement);
+				var spanElement1 = document.createElement("span");
+				var spanElement2 = document.createElement("span");
 
-			masterULElement.appendChild(slaveListItemElement);
+				//slaveListItemElement.setAttribute("style", "text-decoration: line-through");
+
+				var slaveAnchorElement = document.createElement("a");
+				slaveAnchorElement.setAttribute("href", slaveRemoteURL);
+				slaveAnchorElement.innerHTML = slaveHostname;
+
+				slaveListItemElement.appendChild(spanElement1);
+				slaveListItemElement.appendChild(spanElement2);
+
+				spanElement1.appendChild(slaveAnchorElement);
+
+				spanElement2.innerHTML = " -> " + slaveOfflineCause;
+
+				masterULElement.appendChild(slaveListItemElement);
+			}
 		}
 
 		var masterListItemElement = document.createElement("li");
