@@ -45,7 +45,7 @@ $.getJSON('/masters', function(data) {
 
 				spanElement1.appendChild(slaveAnchorElement);
 
-				spanElement2.innerHTML = " -> " + slaveOfflineCause;
+				spanElement2.innerHTML = "<br /><pre>" + slaveOfflineCause + "</pre>";
 
 				masterULElement.appendChild(slaveListItemElement);
 

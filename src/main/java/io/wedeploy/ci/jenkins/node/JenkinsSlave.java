@@ -23,10 +23,6 @@ public class JenkinsSlave extends JenkinsNode {
 
 		_offline = slaveJSONObject.getBoolean("offline");
 		_offlineCause = slaveJSONObject.getString("offlineCauseReason");
-
-		if (_offlineCause.equals("")) {
-			_offlineCause = "n/a";
-		}
 	}
 
 	public JSONObject toJSONObject() {
