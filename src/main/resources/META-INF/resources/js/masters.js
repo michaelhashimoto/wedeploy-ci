@@ -10,9 +10,15 @@ $.getJSON('/masters', function(data) {
 		var masterRemoteURL = jenkinsMaster.remote_url;
 		var masterSlaves = jenkinsMaster.slaves;
 
+		var masterHeaderElement = document.createElement("h2");
+
 		var masterAnchorElement = document.createElement("a");
 		masterAnchorElement.setAttribute("href", masterRemoteURL);
 		masterAnchorElement.innerHTML = masterHostname;
+
+		masterHeaderElement.appendChild(masterAnchorElement);
+
+		var slavesOffline = false;
 
 		var masterULElement = document.createElement("ul");
 
@@ -30,8 +36,6 @@ $.getJSON('/masters', function(data) {
 				var spanElement1 = document.createElement("span");
 				var spanElement2 = document.createElement("span");
 
-				//slaveListItemElement.setAttribute("style", "text-decoration: line-through");
-
 				var slaveAnchorElement = document.createElement("a");
 				slaveAnchorElement.setAttribute("href", slaveRemoteURL);
 				slaveAnchorElement.innerHTML = slaveHostname;
@@ -44,13 +48,19 @@ $.getJSON('/masters', function(data) {
 				spanElement2.innerHTML = " -> " + slaveOfflineCause;
 
 				masterULElement.appendChild(slaveListItemElement);
+
+				slavesOffline = true;
 			}
 		}
 
-		var masterListItemElement = document.createElement("li");
-		masterListItemElement.appendChild(masterAnchorElement);
-		masterListItemElement.appendChild(masterULElement);
+		var masterItemElement = document.createElement("div");
+		masterItemElement.setAttribute("class", masterHostname);
 
-		mastersElement.appendChild(masterListItemElement);
+		if (slavesOffline) {
+			masterItemElement.appendChild(masterHeaderElement);
+			masterItemElement.appendChild(masterULElement);
+
+			mastersElement.appendChild(masterItemElement);
+		}
 	}
 });
