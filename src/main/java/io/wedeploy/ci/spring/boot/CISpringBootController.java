@@ -1,15 +1,19 @@
 package io.wedeploy.ci.spring.boot;
 
-import com.wedeploy.android.WeDeploy;
-import com.wedeploy.android.WeDeploy.Builder;
-import com.wedeploy.android.exception.WeDeployException;
-import com.wedeploy.android.transport.Response;
+import com.commsen.wedeploy.client.WeDeployClient;
+import com.commsen.wedeploy.client.WeDeployClientException;
+import com.commsen.wedeploy.client.data.CollectionDTO;
+import com.commsen.wedeploy.client.data.WeDeployDataCollection;
+import com.commsen.wedeploy.client.data.WeDeployDataDocument;
+import com.commsen.wedeploy.client.data.WeDeployDataService;
+import com.commsen.wedeploy.client.data.WeDeployDataStorage;
 
 import io.wedeploy.ci.jenkins.node.JenkinsMasters;
 import io.wedeploy.ci.util.EnvironmentUtil;
 
 import java.io.IOException;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -35,51 +39,41 @@ public class CISpringBootController {
 	}
 
 	@GetMapping("/api")
-	public String restAPI() throws WeDeployException {
-		WeDeploy weDeploy = new WeDeploy.Builder().build();
+	public String restAPI() throws WeDeployClientException {
+		WeDeployClient weDeploy = new WeDeployClient();
 
-		/* Adding data */
+		WeDeployDataService weDeployDataService = weDeploy.data();
 
-		JSONObject movie1JsonObject = new JSONObject()
-			.put("title", "Star Wars III")
-			.put("year", 2005)
-			.put("rating", 8.0);
+		WeDeployDataStorage weDeployDataStorage = weDeployDataService.connect(
+			"ci", "data");
 
-		JSONObject movie2JsonObject = new JSONObject()
-			.put("title", "Star Wars II")
-			.put("year", 2002)
-			.put("rating", 8.6);
+		CollectionDTO moviesCollectionDTO = CollectionDTO.from("movies");
 
-		JSONArray moviesJsonArray = new JSONArray()
-			.put(movie1JsonObject)
-			.put(movie2JsonObject);
+		if (!weDeployDataStorage.collectionExists("movies")) {
+			weDeployDataStorage.createCollection(moviesCollectionDTO);
 
-		Response response = weDeploy
-			.data("https://data-ci.wedeploy.io")
-			.create("movies", moviesJsonArray)
-			.execute();
+			WeDeployDataCollection weDeployDataCollection =
+				weDeployDataStorage.collection("movies");
 
-		System.out.println(response);
+			JSONObject jsonObject = new JSONObject();
 
-		/* Retrieving data */
+			jsonObject.put("title", "starwars");
+			jsonObject.put("rating", 9.8);
 
-		response = weDeploy
-			.data("https://data-ci.wedeploy.io")
-			.get("movies")
-			.execute();
+			WeDeployDataDocument<JSONObject> weDeployDataDocument =
+				new WeDeployDataDocument<JSONObject>("movie-1", jsonObject);
 
-		System.out.println(response);
+			System.out.println(weDeployDataDocument.getId());
+			System.out.println(weDeployDataDocument.getObject());
 
-		/* Deleting data */
+			weDeployDataCollection.save(weDeployDataDocument);
 
-		response = weDeploy
-			.data("https://data-ci.wedeploy.io")
-			.delete("movies")
-			.execute();
+			return "Created a 'movies' collection";
+		}
 
-		System.out.println(response);
+		weDeployDataStorage.deleteCollections(moviesCollectionDTO);
 
-		return response.toString();
+		return "Deleted a 'movies' collection";
 	}
 
 	private JenkinsMasters _jenkinsMasters;
