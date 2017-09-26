@@ -8,6 +8,11 @@ import com.commsen.wedeploy.client.data.WeDeployDataDocument;
 import com.commsen.wedeploy.client.data.WeDeployDataService;
 import com.commsen.wedeploy.client.data.WeDeployDataStorage;
 
+import com.wedeploy.android.WeDeploy;
+import com.wedeploy.android.WeDeploy.Builder;
+import com.wedeploy.android.exception.WeDeployException;
+import com.wedeploy.android.transport.Response;
+
 import io.wedeploy.ci.jenkins.node.JenkinsMasters;
 import io.wedeploy.ci.util.EnvironmentUtil;
 
@@ -74,6 +79,59 @@ public class CISpringBootController {
 		weDeployDataStorage.deleteCollections(moviesCollectionDTO);
 
 		return "Deleted a 'movies' collection";
+	}
+
+	@GetMapping("/api2")
+	public String quick() throws WeDeployException {
+		WeDeploy weDeploy = new WeDeploy.Builder().build();
+
+		/* Adding data */
+
+		JSONObject movie1JsonObject = new JSONObject()
+			.put("title", "Star Wars III")
+			.put("year", 2005)
+			.put("rating", 8.0);
+
+		JSONObject movie2JsonObject = new JSONObject()
+			.put("title", "Star Wars II")
+			.put("year", 2002)
+			.put("rating", 8.6);
+
+		JSONArray moviesJsonArray = new JSONArray()
+			.put(movie1JsonObject)
+			.put(movie2JsonObject);
+
+		Response response = weDeploy
+			.data("https://data-ci.wedeploy.io")
+			.create("movies", moviesJsonArray)
+			.execute();
+
+		System.out.println(response.getBody());
+
+		/* Retrieving data */
+
+		response = weDeploy
+			.data("https://data-ci.wedeploy.io")
+			.get("movies")
+			.execute();
+
+		System.out.println(response.getBody());
+
+		JSONArray jsonArray = new JSONArray(response.getBody());
+
+		System.out.println(jsonArray.get(0));
+		System.out.println(jsonArray.get(1));
+
+		/* Deleting data */
+
+		response = weDeploy
+			.data("https://data-ci.wedeploy.io")
+			.delete("movies")
+			.execute();
+
+		System.out.println(response.getBody());
+
+		return response.toString();
 	}
 
 	private JenkinsMasters _jenkinsMasters;

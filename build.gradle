@@ -36,6 +36,7 @@ dependencies {
 	compile "com.commsen.wedeploy:com.commsen.wedeploy.client.data:1.0.0"
 	compile "com.commsen.wedeploy:com.commsen.wedeploy.data.mapper.gson:1.0.0"
 	compile "com.commsen.wedeploy:com.commsen.wedeploy.transport.rest.okhttp:1.0.0"
+	compile "com.wedeploy:com.wedeploy.android:0.1.0"
 	compile "commons-codec:commons-codec:1.10"
 	compile "org.json:json:20170516"
 	compile "org.springframework.boot:spring-boot-starter-web"
