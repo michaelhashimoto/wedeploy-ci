@@ -63,4 +63,8 @@ $.getJSON('/masters', function(data) {
 			mastersElement.appendChild(masterItemElement);
 		}
 	}
+
+	var offlineSlaveCountElement = document.getElementById("offline_slave_count");
+
+	offlineSlaveCountElement.innerHTML = data.offline_slave_count;
 });

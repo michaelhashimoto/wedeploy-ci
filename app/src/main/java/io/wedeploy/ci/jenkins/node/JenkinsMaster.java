@@ -31,9 +31,19 @@ public class JenkinsMaster extends JenkinsNode {
 			String displayName = nodeJSONObject.getString("displayName");
 
 			if (displayName.startsWith("cloud-")) {
-				_jenkinsSlaves.add(new JenkinsSlave(displayName, this));
+				JenkinsSlave jenkinsSlave = new JenkinsSlave(displayName, this);
+
+				if (jenkinsSlave.isOffline()) {
+					_offlineSlaveCount++;
+				}
+
+				_jenkinsSlaves.add(jenkinsSlave);
 			}
 		}
+	}
+
+	public int getOfflineSlaveCount() {
+		return _offlineSlaveCount;
 	}
 
 	public List<JenkinsSlave> getJenkinsSlaves() {
@@ -58,6 +68,7 @@ public class JenkinsMaster extends JenkinsNode {
 		return jsonObject;
 	}
 
+	private int _offlineSlaveCount = 0;
 	private List<JenkinsSlave> _jenkinsSlaves;
 
 }

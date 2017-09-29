@@ -16,8 +16,17 @@ public class JenkinsMasters {
 		String[] jenkinsMasterHostnames = _JENKINS_MASTER_HOSTNAMES.split(",");
 
 		for (String jenkinsMasterHostname : jenkinsMasterHostnames) {
-			_jenkinsMasters.add(new JenkinsMaster(jenkinsMasterHostname));
+			JenkinsMaster jenkinsMaster = new JenkinsMaster(
+				jenkinsMasterHostname);
+
+			_offlineSlaveCount += jenkinsMaster.getOfflineSlaveCount();
+
+			_jenkinsMasters.add(jenkinsMaster);
 		}
+	}
+
+	public int getOfflineSlaveCount() {
+		return _offlineSlaveCount;
 	}
 
 	public String toString() {
@@ -30,11 +39,13 @@ public class JenkinsMasters {
 		}
 
 		jsonObject.put("masters", jsonArray);
+		jsonObject.put("offline_slave_count", _offlineSlaveCount);
 
 		return jsonObject.toString();
 	}
 
 	private List<JenkinsMaster> _jenkinsMasters = new ArrayList<>();
+	private int _offlineSlaveCount = 0;
 	private final static String _JENKINS_MASTER_HOSTNAMES =
 		EnvironmentUtil.get("JENKINS_MASTER_HOSTNAMES");
 
