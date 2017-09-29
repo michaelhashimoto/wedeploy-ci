@@ -34,13 +34,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CISpringBootController {
 
-	public CISpringBootController() throws IOException {
-		_jenkinsMasters = new JenkinsMasters();
-	}
-
 	@GetMapping("/masters")
 	public String masters() throws IOException {
-		return _jenkinsMasters.toString();
+		JenkinsMasters jenkinsMasters = new JenkinsMasters();
+
+		return jenkinsMasters.toString();
 	}
 
 	@GetMapping("/api")
@@ -133,7 +131,5 @@ public class CISpringBootController {
 
 		return response.toString();
 	}
-
-	private JenkinsMasters _jenkinsMasters;
 
 }
