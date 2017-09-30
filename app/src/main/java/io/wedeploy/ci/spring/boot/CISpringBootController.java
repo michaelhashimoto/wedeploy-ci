@@ -16,7 +16,6 @@ import com.wedeploy.android.query.SortOrder;
 import com.wedeploy.android.query.filter.Filter;
 import com.wedeploy.android.transport.Response;
 
-import io.wedeploy.ci.jenkins.JenkinsNodeUpdater;
 import io.wedeploy.ci.jenkins.node.JenkinsMasters;
 import io.wedeploy.ci.jenkins.node.JenkinsMastersImpl;
 import io.wedeploy.ci.util.EnvironmentUtil;
@@ -40,7 +39,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class CISpringBootController {
 
 	public CISpringBootController() {
-		JenkinsNodeUpdater.start();
 	}
 
 	@GetMapping("/masters")
