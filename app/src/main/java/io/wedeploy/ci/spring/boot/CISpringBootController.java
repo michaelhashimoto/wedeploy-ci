@@ -11,9 +11,14 @@ import com.commsen.wedeploy.client.data.WeDeployDataStorage;
 import com.wedeploy.android.WeDeploy;
 import com.wedeploy.android.WeDeploy.Builder;
 import com.wedeploy.android.exception.WeDeployException;
+import com.wedeploy.android.query.Query;
+import com.wedeploy.android.query.SortOrder;
+import com.wedeploy.android.query.filter.Filter;
 import com.wedeploy.android.transport.Response;
 
+import io.wedeploy.ci.jenkins.JenkinsNodeUpdater;
 import io.wedeploy.ci.jenkins.node.JenkinsMasters;
+import io.wedeploy.ci.jenkins.node.JenkinsMastersImpl;
 import io.wedeploy.ci.util.EnvironmentUtil;
 
 import java.io.IOException;
@@ -34,9 +39,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CISpringBootController {
 
+	public CISpringBootController() {
+		JenkinsNodeUpdater.start();
+	}
+
 	@GetMapping("/masters")
 	public String masters() throws IOException {
-		JenkinsMasters jenkinsMasters = new JenkinsMasters();
+		JenkinsMasters jenkinsMasters = new JenkinsMastersImpl();
 
 		return jenkinsMasters.toString();
 	}
@@ -77,6 +86,57 @@ public class CISpringBootController {
 		weDeployDataStorage.deleteCollections(moviesCollectionDTO);
 
 		return "Deleted a 'movies' collection";
+	}
+
+	@GetMapping("/delete")
+	public String delete() throws WeDeployException {
+		WeDeploy weDeploy = new WeDeploy.Builder().build();
+
+		Response response = weDeploy
+			.data("https://data-ci.wedeploy.io")
+			.delete("movies")
+			.execute();
+
+		return response.getBody();
+	}
+
+	@GetMapping("/read")
+	public String read() throws WeDeployException {
+		WeDeploy weDeploy = new WeDeploy.Builder().build();
+
+		Response response = weDeploy
+			.data("https://data-ci.wedeploy.io")
+			.orderBy("rating", SortOrder.DESCENDING)
+			.get("movies")
+			.execute();
+
+		return response.getBody();
+	}
+
+	@GetMapping("/write")
+	public String write() throws WeDeployException {
+		WeDeploy weDeploy = new WeDeploy.Builder().build();
+
+		JSONObject movie1JsonObject = new JSONObject()
+			.put("title", "Star Wars III")
+			.put("year", 2005)
+			.put("rating", 8.0);
+
+		JSONObject movie2JsonObject = new JSONObject()
+			.put("title", "Star Wars II")
+			.put("year", 2002)
+			.put("rating", 8.6);
+
+		JSONArray moviesJsonArray = new JSONArray()
+			.put(movie1JsonObject)
+			.put(movie2JsonObject);
+
+		Response response = weDeploy
+			.data("https://data-ci.wedeploy.io")
+			.create("movies", moviesJsonArray)
+			.execute();
+
+		return response.getBody();
 	}
 
 	@GetMapping("/api2")
