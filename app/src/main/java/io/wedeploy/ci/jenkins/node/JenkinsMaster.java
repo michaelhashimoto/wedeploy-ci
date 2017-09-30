@@ -20,7 +20,8 @@ public class JenkinsMaster extends JenkinsNode {
 		_jenkinsSlaves = new ArrayList<>();
 
 		JSONObject computerJSONObject = new JSONObject(CurlUtil.curl(
-			remoteURL + "computer/api/json?tree=computer[displayName]"));
+			remoteURL + "computer/api/json?" +
+				"tree=computer[displayName,offline,offlineCauseReason]"));
 
 		JSONArray computerJSONArray = computerJSONObject.getJSONArray(
 			"computer");
@@ -31,7 +32,8 @@ public class JenkinsMaster extends JenkinsNode {
 			String displayName = nodeJSONObject.getString("displayName");
 
 			if (displayName.startsWith("cloud-")) {
-				JenkinsSlave jenkinsSlave = new JenkinsSlave(displayName, this);
+				JenkinsSlave jenkinsSlave = new JenkinsSlave(
+					nodeJSONObject, this);
 
 				if (jenkinsSlave.isOffline()) {
 					_offlineSlaveCount++;

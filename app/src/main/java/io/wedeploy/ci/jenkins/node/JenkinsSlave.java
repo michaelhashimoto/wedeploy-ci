@@ -8,7 +8,9 @@ import org.json.JSONObject;
 
 public class JenkinsSlave extends JenkinsNode {
 
-	public JenkinsSlave(String hostname, JenkinsMaster jenkinsMaster) throws IOException {
+	public JenkinsSlave(String hostname, JenkinsMaster jenkinsMaster)
+		throws IOException {
+
 		this.hostname = hostname;
 
 		_jenkinsMaster = jenkinsMaster;
@@ -19,7 +21,23 @@ public class JenkinsSlave extends JenkinsNode {
 		remoteURL = "https://" + masterHostname + ".liferay.com/computer/" + hostname + "/";
 
 		JSONObject slaveJSONObject = new JSONObject(CurlUtil.curl(
-			remoteURL + "api/json?tree=offlineCauseReason,offline"));
+			remoteURL + "api/json?tree=offline,offlineCauseReason"));
+
+		_offline = slaveJSONObject.getBoolean("offline");
+		_offlineCause = slaveJSONObject.getString("offlineCauseReason");
+	}
+
+	public JenkinsSlave(
+		JSONObject slaveJSONObject, JenkinsMaster jenkinsMaster) {
+
+		this.hostname = slaveJSONObject.getString("displayName");
+
+		_jenkinsMaster = jenkinsMaster;
+
+		String masterHostname = _jenkinsMaster.getHostname();
+
+		localURL = "http://" + masterHostname + "/computer/" + hostname + "/";
+		remoteURL = "https://" + masterHostname + ".liferay.com/computer/" + hostname + "/";
 
 		_offline = slaveJSONObject.getBoolean("offline");
 		_offlineCause = slaveJSONObject.getString("offlineCauseReason");
