@@ -43,6 +43,10 @@ public class JenkinsSlaveImpl extends JenkinsNode implements JenkinsSlave {
 		_offlineCause = slaveJSONObject.getString("offlineCauseReason");
 	}
 
+	public String getOfflineCause() {
+		return _offlineCause;
+	}
+
 	public boolean isOffline() {
 		return _offline;
 	}

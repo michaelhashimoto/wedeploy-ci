@@ -25,6 +25,10 @@ public class JenkinsMastersImpl implements JenkinsMasters {
 		}
 	}
 
+	public List<JenkinsMaster> getJenkinsMasters() {
+		return _jenkinsMasters;
+	}
+
 	public int getOfflineSlaveCount() {
 		return _offlineSlaveCount;
 	}

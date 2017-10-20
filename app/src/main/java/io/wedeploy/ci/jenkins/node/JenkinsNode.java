@@ -10,6 +10,10 @@ public abstract class JenkinsNode {
 		return hostname;
 	}
 
+	public String getRemoteURL() {
+		return remoteURL;
+	}
+
 	protected String hostname;
 	protected String localURL;
 	protected String remoteURL;
