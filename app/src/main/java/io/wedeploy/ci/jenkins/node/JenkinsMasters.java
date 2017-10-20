@@ -4,4 +4,6 @@ public interface JenkinsMasters {
 
 	public int getOfflineSlaveCount();
 
+	public String getOverviewInformation();
+
 }

@@ -48,6 +48,13 @@ public class CISpringBootController {
 		return jenkinsMasters.toString();
 	}
 
+	@GetMapping("/counts")
+	public String counts() throws IOException {
+		JenkinsMasters jm = new JenkinsMastersImpl();
+
+		return jm.getOverviewInformation();
+	}
+
 	@GetMapping("/api")
 	public String restAPI() throws WeDeployClientException {
 		WeDeployClient weDeploy = new WeDeployClient();

@@ -29,6 +29,17 @@ public class JenkinsMastersImpl implements JenkinsMasters {
 		return _offlineSlaveCount;
 	}
 
+	public String getOverviewInformation() {
+		JSONObject jo = new JSONObject();
+
+		jo.put("offline_slave_count", _offlineSlaveCount);
+		for (JenkinsMaster jenkinsMaster : _jenkinsMasters) {
+			jo.put(jenkinsMaster.getHostname(), jenkinsMaster.getOfflineSlaveCount());
+		}
+
+		return jo.toString();
+	}
+
 	public String toString() {
 		JSONObject jsonObject = new JSONObject();
 
