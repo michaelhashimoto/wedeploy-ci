@@ -43,4 +43,5 @@ dependencies {
 	compile "org.json:json:20170516"
 	compile "org.springframework.boot:spring-boot-starter-tomcat"
 	compile "org.springframework.boot:spring-boot-starter-web"
+	compile "org.quartz-scheduler:quartz:2.2.1"
 }

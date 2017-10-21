@@ -10,6 +10,8 @@ import com.wedeploy.android.transport.Response;
 
 import io.wedeploy.ci.util.CurlUtil;
 
+import java.sql.Timestamp;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -187,7 +189,7 @@ public class JenkinsMaster {
 				.update("master/" + jenkinsMaster.getID(), jsonObject)
 				.execute();
 
-			System.out.println("Updating master: " + jenkinsMaster.getName());
+			System.out.println(new Timestamp(System.currentTimeMillis()) + " Updating information for master: " + jenkinsMaster.getName());
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);

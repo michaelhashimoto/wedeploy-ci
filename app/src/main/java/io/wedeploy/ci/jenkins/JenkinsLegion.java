@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -35,8 +36,6 @@ public class JenkinsLegion {
 		String jenkinsLegionResponseBody = jenkinsLegionResponse.getBody();
 
 		if (jenkinsLegionResponseBody.equals("[]")) {
-			System.out.println(new Timestamp(System.currentTimeMillis()) + " Jenkins Legion loading into database.");
-
 			_id = String.valueOf(CollectionUtil.getUniqueTimestamp());
 
 			Set<String> cohortNames = new HashSet<>();
@@ -66,11 +65,9 @@ public class JenkinsLegion {
 
 			writeJenkinsLegionsToDatabase();
 
-			System.out.println(new Timestamp(System.currentTimeMillis()) + " Jenkins Legion loaded into database.");
+			System.out.println(new Timestamp(System.currentTimeMillis()) + " Jenkins Legion loaded data into database.");
 		}
 		else {
-			System.out.println(new Timestamp(System.currentTimeMillis()) + " Jenkins Legion loading from database.");
-
 			JSONArray jenkinsLegionJSONArray = new JSONArray(jenkinsLegionResponseBody);
 
 			JSONObject jenkinsLegionJSONObject = jenkinsLegionJSONArray.getJSONObject(0);
@@ -103,6 +100,8 @@ public class JenkinsLegion {
 
 			System.out.println(new Timestamp(System.currentTimeMillis()) + " Jenkins Legion loaded from database.");
 		}
+
+		_lastUpdate = new Date();
 	}
 
 	public String getID() {
@@ -120,6 +119,9 @@ public class JenkinsLegion {
 	public List<JenkinsCohort> getCohorts() {
 		return _cohorts;
 	}
+	public String getLastUpdate() {
+		return _lastUpdate.toString();
+	}
 
 	public void update() {
 		for (JenkinsCohort jenkinsCohort : _cohorts) {
@@ -131,6 +133,10 @@ public class JenkinsLegion {
 				JenkinsCohort.updateJenkinsCohortOnDatabase(jenkinsCohort);
 			}
 		}
+
+		_lastUpdate = new Date();
+
+		updateJenkinsCohortOnDatabase(this);
 	}
 
 	public static void addJenkinsLegion(JenkinsLegion jenkinsLegion) {
@@ -149,15 +155,33 @@ public class JenkinsLegion {
 		return _jenkinsLegions.get(0);
 	}
 
+	public static void updateJenkinsCohortOnDatabase(JenkinsLegion jenkinsLegion) {
+		try {
+			JSONObject jsonObject = new JSONObject()
+				.put("last_update", jenkinsLegion.getLastUpdate());
+
+			CollectionUtil.getWeDeploy()
+				.data("https://data-ci.wedeploy.io")
+				.update("legion/" + jenkinsLegion.getID(), jsonObject)
+				.execute();
+
+			System.out.println(new Timestamp(System.currentTimeMillis()) + " Updating information for legion: " + jenkinsLegion.getName());
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	public static void writeJenkinsLegionsToDatabase() {
 		try {
 			JSONArray jsonArray = new JSONArray();
 
 			for (JenkinsLegion jenkinsLegion : _jenkinsLegionsToBeWritten) {
 				JSONObject jsonObject = new JSONObject()
+					.put("cohort_ids", jenkinsLegion.getCohortIDs())
+					.put("last_update", jenkinsLegion.getLastUpdate())
 					.put("id", jenkinsLegion.getID())
-					.put("name", jenkinsLegion.getName())
-					.put("cohort_ids", jenkinsLegion.getCohortIDs());
+					.put("name", jenkinsLegion.getName());
 
 				jsonArray.put(jsonObject);
 			}
@@ -184,6 +208,7 @@ public class JenkinsLegion {
 	}
 
 	private String _id;
+	private Date _lastUpdate;
 	private final List<JenkinsCohort> _cohorts = new ArrayList<>();
 	private final List<String> _cohortIDs = new ArrayList<>();
 	private final static String _JENKINS_LEGION_NAME = "liferay-ci";

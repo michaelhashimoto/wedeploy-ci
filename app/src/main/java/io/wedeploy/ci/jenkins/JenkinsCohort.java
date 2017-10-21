@@ -10,6 +10,8 @@ import com.wedeploy.android.transport.Response;
 
 import io.wedeploy.ci.util.EnvironmentUtil;
 
+import java.sql.Timestamp;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -137,7 +139,7 @@ public class JenkinsCohort {
 				.update("cohort/" + jenkinsCohort.getID(), jsonObject)
 				.execute();
 
-			System.out.println("Updating cohort: " + jenkinsCohort.getName());
+			System.out.println(new Timestamp(System.currentTimeMillis()) + " Updating information for cohort: " + jenkinsCohort.getName());
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);

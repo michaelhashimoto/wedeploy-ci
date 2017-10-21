@@ -17,8 +17,6 @@ public class CISpringBootController {
 	public String index(Map<String, Object> model) throws Exception {
 		JenkinsLegion jenkinsLegion = JenkinsLegion.getJenkinsLegion();
 
-		jenkinsLegion.update();
-
 		model.put("jenkinsLegion", jenkinsLegion);
 
 		return "index";

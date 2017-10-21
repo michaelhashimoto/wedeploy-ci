@@ -21,6 +21,7 @@
 	</head>
 	<body>
 		<h1>Jenkins Cohorts</h1>
+		<p>Last updated ${jenkinsLegion.getLastUpdate()}</p>
 
 		<c:forEach items="${jenkinsLegion.getCohorts()}" var="jenkinsCohort">
 			<h2>${jenkinsCohort.getName()}</h2>

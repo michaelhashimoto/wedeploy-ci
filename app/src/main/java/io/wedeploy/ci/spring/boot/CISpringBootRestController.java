@@ -47,8 +47,6 @@ public class CISpringBootRestController {
 
 		JenkinsLegion jenkinsLegion = JenkinsLegion.getJenkinsLegion();
 
-		jenkinsLegion.update();
-
 		List<JenkinsCohort> jenkinsCohorts = jenkinsLegion.getCohorts();
 
 		int totalOfflineSlaveCount = 0;
