@@ -16,13 +16,15 @@ import com.wedeploy.android.query.SortOrder;
 import com.wedeploy.android.query.filter.Filter;
 import com.wedeploy.android.transport.Response;
 
-import io.wedeploy.ci.jenkins.node.JenkinsMasters;
-import io.wedeploy.ci.jenkins.node.JenkinsMastersImpl;
+import io.wedeploy.ci.jenkins.JenkinsCohort;
+import io.wedeploy.ci.jenkins.JenkinsLegion;
+import io.wedeploy.ci.jenkins.JenkinsMaster;
 import io.wedeploy.ci.util.EnvironmentUtil;
 
 import java.io.IOException;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -39,160 +41,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RestController
 public class CISpringBootRestController {
 
-	@GetMapping("/masters")
-	public String masters() throws IOException {
-		JenkinsMasters jenkinsMasters = new JenkinsMastersImpl();
-
-		return jenkinsMasters.toString();
-	}
-
 	@GetMapping("/counts")
-	public String counts() throws IOException {
-		JenkinsMasters jm = new JenkinsMastersImpl();
+	public String counts() throws Exception {
+		JSONObject jsonObject = new JSONObject();
 
-		return jm.getOverviewInformation();
-	}
+		JenkinsLegion jenkinsLegion = JenkinsLegion.getJenkinsLegion();
 
-	@GetMapping("/api")
-	public String restAPI() throws WeDeployClientException {
-		WeDeployClient weDeploy = new WeDeployClient();
+		jenkinsLegion.update();
 
-		WeDeployDataService weDeployDataService = weDeploy.data();
+		List<JenkinsCohort> jenkinsCohorts = jenkinsLegion.getCohorts();
 
-		WeDeployDataStorage weDeployDataStorage = weDeployDataService.connect(
-			"ci", "data");
+		int totalOfflineSlaveCount = 0;
 
-		CollectionDTO moviesCollectionDTO = CollectionDTO.from("movies");
+		for (JenkinsCohort jenkinsCohort : jenkinsCohorts) {
+			List<JenkinsMaster> jenkinsMasters = jenkinsCohort.getMasters();
 
-		if (!weDeployDataStorage.collectionExists("movies")) {
-			weDeployDataStorage.createCollection(moviesCollectionDTO);
+			for (JenkinsMaster jenkinsMaster : jenkinsMasters) {
+				jsonObject.put(jenkinsMaster.getName(), jenkinsMaster.getOfflineSlaveCount());
+			}
 
-			WeDeployDataCollection weDeployDataCollection =
-				weDeployDataStorage.collection("movies");
-
-			JSONObject jsonObject = new JSONObject();
-
-			jsonObject.put("title", "starwars");
-			jsonObject.put("rating", 9.8);
-
-			WeDeployDataDocument<JSONObject> weDeployDataDocument =
-				new WeDeployDataDocument<JSONObject>("movie-1", jsonObject);
-
-			System.out.println(weDeployDataDocument.getId());
-			System.out.println(weDeployDataDocument.getObject());
-
-			weDeployDataCollection.save(weDeployDataDocument);
-
-			return "Created a 'movies' collection";
+			totalOfflineSlaveCount += jenkinsCohort.getOfflineSlaveCount();
 		}
 
-		weDeployDataStorage.deleteCollections(moviesCollectionDTO);
+		jsonObject.put("offline_slave_count", totalOfflineSlaveCount);
 
-		return "Deleted a 'movies' collection";
-	}
-
-	@GetMapping("/delete")
-	public String delete() throws WeDeployException {
-		WeDeploy weDeploy = new WeDeploy.Builder().build();
-
-		Response response = weDeploy
-			.data("https://data-ci.wedeploy.io")
-			.delete("movies")
-			.execute();
-
-		return response.getBody();
-	}
-
-	@GetMapping("/read")
-	public String read() throws WeDeployException {
-		WeDeploy weDeploy = new WeDeploy.Builder().build();
-
-		Response response = weDeploy
-			.data("https://data-ci.wedeploy.io")
-			.orderBy("rating", SortOrder.DESCENDING)
-			.get("movies")
-			.execute();
-
-		return response.getBody();
-	}
-
-	@GetMapping("/write")
-	public String write() throws WeDeployException {
-		WeDeploy weDeploy = new WeDeploy.Builder().build();
-
-		JSONObject movie1JsonObject = new JSONObject()
-			.put("title", "Star Wars III")
-			.put("year", 2005)
-			.put("rating", 8.0);
-
-		JSONObject movie2JsonObject = new JSONObject()
-			.put("title", "Star Wars II")
-			.put("year", 2002)
-			.put("rating", 8.6);
-
-		JSONArray moviesJsonArray = new JSONArray()
-			.put(movie1JsonObject)
-			.put(movie2JsonObject);
-
-		Response response = weDeploy
-			.data("https://data-ci.wedeploy.io")
-			.create("movies", moviesJsonArray)
-			.execute();
-
-		return response.getBody();
-	}
-
-	@GetMapping("/api2")
-	public String quick() throws WeDeployException {
-		WeDeploy weDeploy = new WeDeploy.Builder().build();
-
-		/* Adding data */
-
-		JSONObject movie1JsonObject = new JSONObject()
-			.put("title", "Star Wars III")
-			.put("year", 2005)
-			.put("rating", 8.0);
-
-		JSONObject movie2JsonObject = new JSONObject()
-			.put("title", "Star Wars II")
-			.put("year", 2002)
-			.put("rating", 8.6);
-
-		JSONArray moviesJsonArray = new JSONArray()
-			.put(movie1JsonObject)
-			.put(movie2JsonObject);
-
-		Response response = weDeploy
-			.data("https://data-ci.wedeploy.io")
-			.create("movies", moviesJsonArray)
-			.execute();
-
-		System.out.println(response.getBody());
-
-		/* Retrieving data */
-
-		response = weDeploy
-			.data("https://data-ci.wedeploy.io")
-			.get("movies")
-			.execute();
-
-		System.out.println(response.getBody());
-
-		JSONArray jsonArray = new JSONArray(response.getBody());
-
-		System.out.println(jsonArray.get(0));
-		System.out.println(jsonArray.get(1));
-
-		/* Deleting data */
-
-		response = weDeploy
-			.data("https://data-ci.wedeploy.io")
-			.delete("movies")
-			.execute();
-
-		System.out.println(response.getBody());
-
-		return response.toString();
+		return jsonObject.toString();
 	}
 
 }

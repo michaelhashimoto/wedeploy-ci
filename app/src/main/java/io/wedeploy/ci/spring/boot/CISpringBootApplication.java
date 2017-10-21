@@ -1,5 +1,7 @@
 package io.wedeploy.ci.spring.boot;
 
+import io.wedeploy.ci.jenkins.JenkinsLegion;
+
 import java.util.Arrays;
 
 import org.springframework.boot.CommandLineRunner;
@@ -20,6 +22,8 @@ public class CISpringBootApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(CISpringBootApplication.class, args);
+
+		JenkinsLegion jenkinsLegion = new JenkinsLegion();
 	}
 
 }
