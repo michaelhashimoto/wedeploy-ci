@@ -37,7 +37,7 @@ public class JenkinsUpdaterJob implements Job {
 
 			Trigger trigger = TriggerBuilder
 				.newTrigger().withIdentity("cronTrigger", "group")
-				.withSchedule(CronScheduleBuilder.cronSchedule("0 */1 * ? * *"))
+				.withSchedule(CronScheduleBuilder.cronSchedule("0 */5 * ? * *"))
 				.build();
 
 			_scheduler = new StdSchedulerFactory().getScheduler();
