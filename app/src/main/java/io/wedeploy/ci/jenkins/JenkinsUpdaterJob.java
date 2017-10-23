@@ -21,7 +21,7 @@ public class JenkinsUpdaterJob implements Job {
 
 		try {
 			JenkinsLegion jenkinsLegion = JenkinsLegion.getJenkinsLegion();
-
+*
 			jenkinsLegion.update();
 		}
 		catch (Exception e) {
@@ -37,7 +37,7 @@ public class JenkinsUpdaterJob implements Job {
 
 			Trigger trigger = TriggerBuilder
 				.newTrigger().withIdentity("cronTrigger", "group")
-				.withSchedule(CronScheduleBuilder.cronSchedule("0 */5 * ? * *"))
+				.withSchedule(CronScheduleBuilder.cronSchedule("0 */10 * ? * *"))
 				.build();
 
 			_scheduler = new StdSchedulerFactory().getScheduler();
