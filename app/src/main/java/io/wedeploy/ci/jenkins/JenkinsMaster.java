@@ -189,7 +189,7 @@ public class JenkinsMaster {
 				.update("master/" + jenkinsMaster.getID(), jsonObject)
 				.execute();
 
-			System.out.println(new Timestamp(System.currentTimeMillis()) + " Updating information for master: " + jenkinsMaster.getName());
+			//System.out.println(new Timestamp(System.currentTimeMillis()) + " Updating information for master: " + jenkinsMaster.getName());
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);

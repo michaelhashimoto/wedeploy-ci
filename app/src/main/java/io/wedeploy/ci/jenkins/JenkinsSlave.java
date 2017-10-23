@@ -98,7 +98,7 @@ public class JenkinsSlave {
 				.update("slave/" + jenkinsSlave.getID(), jsonObject)
 				.execute();
 
-			System.out.println(new Timestamp(System.currentTimeMillis()) + " Updating information for slave: " + jenkinsSlave.getName());
+			//System.out.println(new Timestamp(System.currentTimeMillis()) + " Updating information for slave: " + jenkinsSlave.getName());
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);

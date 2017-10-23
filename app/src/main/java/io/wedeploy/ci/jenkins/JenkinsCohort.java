@@ -139,7 +139,7 @@ public class JenkinsCohort {
 				.update("cohort/" + jenkinsCohort.getID(), jsonObject)
 				.execute();
 
-			System.out.println(new Timestamp(System.currentTimeMillis()) + " Updating information for cohort: " + jenkinsCohort.getName());
+			//System.out.println(new Timestamp(System.currentTimeMillis()) + " Updating information for cohort: " + jenkinsCohort.getName());
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);

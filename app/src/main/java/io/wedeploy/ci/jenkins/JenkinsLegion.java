@@ -165,7 +165,7 @@ public class JenkinsLegion {
 				.update("legion/" + jenkinsLegion.getID(), jsonObject)
 				.execute();
 
-			System.out.println(new Timestamp(System.currentTimeMillis()) + " Updating information for legion: " + jenkinsLegion.getName());
+			//System.out.println(new Timestamp(System.currentTimeMillis()) + " Updating information for legion: " + jenkinsLegion.getName());
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
