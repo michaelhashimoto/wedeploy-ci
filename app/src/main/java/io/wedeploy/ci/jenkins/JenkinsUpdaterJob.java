@@ -21,7 +21,7 @@ public class JenkinsUpdaterJob implements Job {
 
 		try {
 			JenkinsLegion jenkinsLegion = JenkinsLegion.getJenkinsLegion();
-*
+
 			jenkinsLegion.update();
 		}
 		catch (Exception e) {
