@@ -36,6 +36,8 @@ public class JenkinsLegion {
 		String jenkinsLegionResponseBody = jenkinsLegionResponse.getBody();
 
 		if (jenkinsLegionResponseBody.equals("[]")) {
+			_lastUpdate = new Date();
+
 			_id = String.valueOf(CollectionUtil.getUniqueTimestamp());
 
 			Set<String> cohortNames = new HashSet<>();
@@ -68,6 +70,8 @@ public class JenkinsLegion {
 			System.out.println(new Timestamp(System.currentTimeMillis()) + " Jenkins Legion loaded data into database.");
 		}
 		else {
+			_lastUpdate = new Date();
+
 			JSONArray jenkinsLegionJSONArray = new JSONArray(jenkinsLegionResponseBody);
 
 			JSONObject jenkinsLegionJSONObject = jenkinsLegionJSONArray.getJSONObject(0);
@@ -100,8 +104,6 @@ public class JenkinsLegion {
 
 			System.out.println(new Timestamp(System.currentTimeMillis()) + " Jenkins Legion loaded from database.");
 		}
-
-		_lastUpdate = new Date();
 	}
 
 	public String getID() {
