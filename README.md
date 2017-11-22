@@ -1,4 +1,4 @@
-# WeDeploy CI
+# WeDeploy CI [![Build Status](https://travis-ci.org/michaelhashimoto/wedeploy-ci.svg?branch=master)](https://travis-ci.org/michaelhashimoto/wedeploy-ci)
 
 This is a project to create a simple webapplication to help with Jenkins day to day tasks.
 

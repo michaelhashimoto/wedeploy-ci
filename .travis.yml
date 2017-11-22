@@ -4,6 +4,4 @@ jdk:
   - oraclejdk8
 
 script:
-  cd app
-
-  gradle compileJava
+  cd app/ ; gradle compileJava
