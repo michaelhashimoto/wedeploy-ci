@@ -29,22 +29,24 @@
 
 			<c:forEach items="${jenkinsCohort.getMasters()}" var="jenkinsMaster">
 				<c:if test="${jenkinsMaster.getOfflineSlaveCount() > 0}">
-					<h3><a href="${jenkinsMaster.getRemoteURL()}">${jenkinsMaster.getName()}</a></h3>
-					<h4>Master Offline Slave Count: ${jenkinsMaster.getOfflineSlaveCount()}</h4>
+					<h4><a href="${jenkinsMaster.getRemoteURL()}">${jenkinsMaster.getName()}</a></h4>
 
-					<ul>
-						<c:forEach items="${jenkinsMaster.getSlaves()}" var="jenkinsSlave">
-							<c:if test="${jenkinsSlave.isOffline()}">
-								<li>
-									<a href="${jenkinsSlave.getRemoteURL()}">${jenkinsSlave.getName()}</a>
+					<details>
+						<summary>Master Offline Slave Count: ${jenkinsMaster.getOfflineSlaveCount()}</summary>
+						<ul>
+							<c:forEach items="${jenkinsMaster.getSlaves()}" var="jenkinsSlave">
+								<c:if test="${jenkinsSlave.isOffline()}">
+									<li>
+										<a href="${jenkinsSlave.getRemoteURL()}">${jenkinsSlave.getName()}</a>
 
-									<br />
+										<br />
 
-									<span><pre>${jenkinsSlave.getOfflineCause()}</pre></span>
-								</li>
-							</c:if>
-						</c:forEach>
-					</ul>
+										<span><pre>${jenkinsSlave.getOfflineCause()}</pre></span>
+									</li>
+								</c:if>
+							</c:forEach>
+						</ul>
+					</details>
 				</c:if>
 			</c:forEach>
 		</c:forEach>
