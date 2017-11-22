@@ -157,6 +157,31 @@ public class JenkinsLegion {
 		return _jenkinsLegions.get(0);
 	}
 
+	public static void rebuildDatabase() {
+		try {
+			WeDeploy weDeploy = new WeDeploy.Builder().build();
+
+			weDeploy.data("https://data-ci.wedeploy.io")
+				.delete("legion")
+				.execute();
+
+			weDeploy.data("https://data-ci.wedeploy.io")
+				.delete("cohort")
+				.execute();
+
+			weDeploy.data("https://data-ci.wedeploy.io")
+				.delete("master")
+				.execute();
+
+			weDeploy.data("https://data-ci.wedeploy.io")
+				.delete("slave")
+				.execute();
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	public static void updateJenkinsCohortOnDatabase(JenkinsLegion jenkinsLegion) {
 		try {
 			JSONObject jsonObject = new JSONObject()
