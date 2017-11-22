@@ -1,4 +1,5 @@
 {
+    "dependencies": ["db"],
     "id": "app",
     "memory": 2048
 }
