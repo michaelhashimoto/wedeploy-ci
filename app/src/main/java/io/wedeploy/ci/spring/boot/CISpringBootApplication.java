@@ -33,7 +33,7 @@ public class CISpringBootApplication extends SpringBootServletInitializer {
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(CISpringBootApplication.class, args);
 
-		JenkinsLegion jenkinsLegion = new JenkinsLegion();
+		JenkinsLegion jenkinsLegion = JenkinsLegion.getJenkinsLegion();
 
 		JenkinsUpdaterJob.start();
 	}
