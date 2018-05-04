@@ -26,7 +26,10 @@ public class BaseJob implements Job {
 		_remoteURL = "https://" + _hostName + ".liferay.com/job/" + _jobName;
 	}
 
-	public void readCurrentBuilds() {
+	@Override
+	public List<Build> getCompletedBuilds() {
+		List<Build> completedBuilds = new ArrayList<>();
+
 		JSONObject jsonObject = new JSONObject(CurlUtil.curl(_localURL + "/api/json?tree=builds[url]"));
 
 		JSONArray jsonArray = jsonObject.getJSONArray("builds");
@@ -44,11 +47,10 @@ public class BaseJob implements Job {
 				continue;
 			}
 
-			System.out.println();
-			System.out.println(build.getRemoteURL());
-			System.out.println(build.getResult());
-			System.out.println(build.getTopLevelDuration());
+			completedBuilds.add(build);
 		}
+
+		return completedBuilds;
 	}
 
 	@Override

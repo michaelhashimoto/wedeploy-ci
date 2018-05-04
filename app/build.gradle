@@ -38,6 +38,7 @@ dependencies {
 	compile "com.commsen.wedeploy:com.commsen.wedeploy.transport.rest.okhttp:1.0.0"
 	compile "com.wedeploy:com.wedeploy.android:0.1.0"
 	compile "commons-codec:commons-codec:1.10"
+	compile "dom4j:dom4j:1.6.1"
 	compile "javax.servlet:jstl"
 	compile "org.apache.tomcat.embed:tomcat-embed-jasper"
 	compile "org.json:json:20170516"

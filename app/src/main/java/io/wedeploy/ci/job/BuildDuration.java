@@ -5,11 +5,7 @@ import java.util.regex.Pattern;
 
 public class BuildDuration {
 
-	protected BuildDuration(Integer totalDuration) {
-		_totalDuration = totalDuration;
-
-		Integer duration = totalDuration;
-
+	protected BuildDuration(Integer duration) {
 		_days =	(duration / (1000 * 60 * 60 * 24));
 		duration = (duration % (1000 * 60 * 60 * 24));
 
@@ -20,6 +16,50 @@ public class BuildDuration {
 		duration = (duration % (1000 * 60));
 
 		_seconds = (duration / 1000);
+	}
+
+	protected BuildDuration(String totalCpuUsage) {
+		Matcher matcher = _pattern.matcher(totalCpuUsage);
+
+		if (!matcher.find()) {
+			throw new RuntimeException("Invalid CPU Usage: " + totalCpuUsage);
+		}
+
+		String days = matcher.group("days");
+
+		if (days != null) {
+			_days =	Integer.valueOf(days);
+		}
+		else {
+			_days = 0;
+		}
+
+		String hours = matcher.group("hours");
+
+		if (hours != null) {
+			_hours =	Integer.valueOf(hours);
+		}
+		else {
+			_hours = 0;
+		}
+
+		String minutes = matcher.group("minutes");
+
+		if (minutes != null) {
+			_minutes = Integer.valueOf(minutes);
+		}
+		else {
+			_minutes = 0;
+		}
+
+		String seconds = matcher.group("seconds");
+
+		if (seconds != null) {
+			_seconds =	Integer.valueOf(seconds);
+		}
+		else {
+			_seconds = 0;
+		}
 	}
 
 	@Override
@@ -75,5 +115,12 @@ public class BuildDuration {
 	private final Integer _hours;
 	private final Integer _minutes;
 	private final Integer _seconds;
-	private final Integer _totalDuration;
+
+	private static Pattern _pattern = Pattern.compile(
+		"Total CPU Usage Time: " +
+		"((?<days>\\d+) days?)?\\s*" +
+		"((?<hours>\\d+) hours?)?\\s*" +
+		"((?<minutes>\\d+) minutes?)?\\s*" +
+		"((?<seconds>\\d+) seconds?)?\\s*" +
+		"((?<milliseconds>\\d+) ms)?");
 }

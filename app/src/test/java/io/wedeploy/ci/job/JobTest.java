@@ -24,10 +24,16 @@ public class JobTest {
 	}
 
 	@Test
-	public void testReadCurrentBuilds() {
-		BaseJob baseJob = new BaseJob("http://test-1-1/job/test-portal-acceptance-pullrequest(master)");
+	public void testCompletedBuilds() {
+		Job job = new BaseJob("http://test-1-1/job/test-portal-acceptance-pullrequest(master)");
 
-		baseJob.readCurrentBuilds();
+		for (Build build : job.getCompletedBuilds()) {
+			System.out.println();
+			System.out.println(build.getRemoteURL());
+			System.out.println(build.getResult());
+			System.out.println(build.getTopLevelDuration());
+			System.out.println(build.getTotalDuration());
+		}
 	}
 
 }
