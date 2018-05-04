@@ -16,7 +16,7 @@ public class BuildTest {
 
 			Assert.assertEquals(new Integer(i), build.getBuildNumber());
 			Assert.assertEquals("http://test-1-1/job/test-portal-acceptance-upstream(master)/" + i, build.getLocalURL());
-			Assert.assertEquals("https://test-1-1.lax.liferay.com/job/test-portal-acceptance-upstream(master)/" + i, build.getRemoteURL());
+			Assert.assertEquals("https://test-1-1.liferay.com/job/test-portal-acceptance-upstream(master)/" + i, build.getRemoteURL());
 		}
 	}
 

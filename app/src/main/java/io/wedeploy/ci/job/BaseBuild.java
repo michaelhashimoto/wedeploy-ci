@@ -1,9 +1,16 @@
 package io.wedeploy.ci.job;
 
+import io.wedeploy.ci.util.CurlUtil;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.json.JSONObject;
 
 public class BaseBuild implements Build {
 
@@ -20,7 +27,25 @@ public class BaseBuild implements Build {
 		String jobName = job.getJobName();
 
 		_localURL = "http://" + hostName + "/job/" + jobName + "/" + _buildNumber;
-		_remoteURL = "https://" + hostName + ".lax.liferay.com/job/" + jobName + "/" + _buildNumber;
+		_remoteURL = "https://" + hostName + ".liferay.com/job/" + jobName + "/" + _buildNumber;
+
+		try {
+			JSONObject jsonObject = new JSONObject(CurlUtil.curl(_remoteURL + "/api/json?tree=result,duration"));
+
+			if (jsonObject.opt("result") != null) {
+				_result = Result.valueOf(jsonObject.getString("result"));
+			}
+			else {
+				_result = Result.NOT_BUILT;
+			}
+		}
+		catch (Throwable t) {
+			System.out.println(t.getMessage());
+		}
+	}
+
+	public BaseBuild(Job job, JSONObject buildJSONObject) {
+		this(job, buildJSONObject.getString("url"));
 	}
 
 	@Override
@@ -38,9 +63,15 @@ public class BaseBuild implements Build {
 		return _remoteURL;
 	}
 
+	@Override
+	public Result getResult() {
+		return _result;
+	}
+
 	private final String _localURL;
 	private final Integer _buildNumber;
 	private final String _remoteURL;
+	private Result _result = Result.NOT_FOUND;
 
 	private static Pattern _pattern = Pattern.compile(
 		"https?://[^/]+/job/[^/]+/(?<buildNumber>\\d+)/?");

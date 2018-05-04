@@ -10,8 +10,8 @@ public class JobTest {
 		String[] jobURLs = new String[] {
 			"http://test-1-1/job/test-portal-acceptance-upstream(master)",
 			"http://test-1-1/job/test-portal-acceptance-upstream(master)/",
-			"https://test-1-1.lax.liferay.com/job/test-portal-acceptance-upstream(master)",
-			"https://test-1-1.lax.liferay.com/job/test-portal-acceptance-upstream(master)/"
+			"https://test-1-1.liferay.com/job/test-portal-acceptance-upstream(master)",
+			"https://test-1-1.liferay.com/job/test-portal-acceptance-upstream(master)/"
 		};
 
 		for (String jobURL : jobURLs) {
@@ -19,8 +19,15 @@ public class JobTest {
 
 			Assert.assertEquals("test-portal-acceptance-upstream(master)", job.getJobName());
 			Assert.assertEquals("http://test-1-1/job/test-portal-acceptance-upstream(master)", job.getLocalURL());
-			Assert.assertEquals("https://test-1-1.lax.liferay.com/job/test-portal-acceptance-upstream(master)", job.getRemoteURL());
+			Assert.assertEquals("https://test-1-1.liferay.com/job/test-portal-acceptance-upstream(master)", job.getRemoteURL());
 		}
+	}
+
+	@Test
+	public void testReadCurrentBuilds() {
+		BaseJob baseJob = new BaseJob("http://test-1-1/job/test-portal-acceptance-pullrequest(master)");
+
+		baseJob.readCurrentBuilds();
 	}
 
 }

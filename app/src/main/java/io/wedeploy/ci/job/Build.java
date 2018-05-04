@@ -8,4 +8,10 @@ public interface Build {
 
 	public String getRemoteURL();
 
+	public Result getResult();
+
+	public enum Result {
+		ABORTED, FAILURE, NOT_BUILT, NOT_FOUND, SUCCESS, UNSTABLE
+	}
+
 }
