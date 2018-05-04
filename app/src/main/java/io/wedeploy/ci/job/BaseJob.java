@@ -6,29 +6,37 @@ import java.util.regex.Pattern;
 public class BaseJob implements Job {
 
 	public BaseJob(String url) {
-		_url = url;
-
 		Matcher matcher = _pattern.matcher(url);
 
 		if (!matcher.find()) {
-			throw new RuntimeException("Invalid url " + _url);
+			throw new RuntimeException("Invalid url " + url);
 		}
 
-		_name = matcher.group("jobName");
+		_jobName = matcher.group("jobName");
+		_hostName = matcher.group("hostName");
+
+		_localURL = "http://" + _hostName + "/job/" + _jobName;
+		_remoteURL = "https://" + _hostName + ".lax.liferay.com/job/" + _jobName;
 	}
 
-	public String getName() {
-		return _name;
+	public String getLocalURL() {
+		return _localURL;
 	}
 
-	public String getURL() {
-		return _name;
+	public String getJobName() {
+		return _jobName;
 	}
 
-	private String _name;
-	private String _url;
+	public String getRemoteURL() {
+		return _remoteURL;
+	}
+
+	private final String _hostName;
+	private final String _localURL;
+	private final String _jobName;
+	private final String _remoteURL;
 
 	private static Pattern _pattern = Pattern.compile(
-		"https?://[^/]+/job/(?<jobName>[^/]+)/");
+		"https?://(?<hostName>test-\\d+-\\d+)[^/]*/job/(?<jobName>[^/]+)/?");
 
 }

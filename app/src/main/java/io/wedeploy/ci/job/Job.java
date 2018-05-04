@@ -2,8 +2,10 @@ package io.wedeploy.ci.job;
 
 public interface Job {
 
-	public String getName();
+	public String getLocalURL();
 
-	public String getURL();
+	public String getJobName();
+
+	public String getRemoteURL();
 
 }
