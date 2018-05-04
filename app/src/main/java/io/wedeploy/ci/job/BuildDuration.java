@@ -121,6 +121,5 @@ public class BuildDuration {
 		"((?<days>\\d+) days?)?\\s*" +
 		"((?<hours>\\d+) hours?)?\\s*" +
 		"((?<minutes>\\d+) minutes?)?\\s*" +
-		"((?<seconds>\\d+) seconds?)?\\s*" +
-		"((?<milliseconds>\\d+) ms)?");
+		"((?<seconds>\\d+) seconds?)?");
 }

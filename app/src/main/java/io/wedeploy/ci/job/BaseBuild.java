@@ -56,7 +56,7 @@ public class BaseBuild implements Build {
 			if (jsonObject.opt("description") == null) {
 				_totalDuration = _topLevelDuration;
 
-				System.out.println("No description found: " + _remoteURL);
+				System.out.println("WARNING: No description found " + _remoteURL);
 
 				return;
 			}
@@ -68,7 +68,7 @@ public class BaseBuild implements Build {
 			if (!descriptionMatcher.find()) {
 				_totalDuration = _topLevelDuration;
 
-				System.out.println("No jenkins report found: " + _remoteURL);
+				System.out.println("WARNING: No jenkins report found " + _remoteURL);
 
 				return;
 			}
@@ -91,6 +91,11 @@ public class BaseBuild implements Build {
 	@Override
 	public Integer getBuildNumber() {
 		return _buildNumber;
+	}
+
+	@Override
+	public BuildStartTime getBuildStartTime() {
+		return _buildStartTime;
 	}
 
 	@Override

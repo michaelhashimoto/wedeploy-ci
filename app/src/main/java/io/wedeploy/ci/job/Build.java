@@ -4,6 +4,8 @@ public interface Build {
 
 	public Integer getBuildNumber();
 
+	public BuildStartTime getBuildStartTime();
+
 	public String getLocalURL();
 
 	public String getRemoteURL();

@@ -28,7 +28,11 @@ public class BaseJob implements Job {
 
 	@Override
 	public List<Build> getCompletedBuilds() {
-		List<Build> completedBuilds = new ArrayList<>();
+		if (_completedBuilds != null) {
+			return _completedBuilds;
+		}
+
+		_completedBuilds = new ArrayList<>();
 
 		JSONObject jsonObject = new JSONObject(CurlUtil.curl(_localURL + "/api/json?tree=builds[url]"));
 
@@ -47,10 +51,73 @@ public class BaseJob implements Job {
 				continue;
 			}
 
-			completedBuilds.add(build);
+			_completedBuilds.add(build);
 		}
 
-		return completedBuilds;
+		return _completedBuilds;
+	}
+
+	@Override
+	public List<Build> getCompletedBuildsByDay(Integer year, Integer month, Integer day) {
+		return getCompletedBuildsByDay(year, month, day, 1);
+	}
+
+	@Override
+	public List<Build> getCompletedBuildsByDay(Integer year, Integer month, Integer day, Integer numberOfDays) {
+		List<Build> builds = new ArrayList<>();
+
+		for (Build build : getCompletedBuildsByMonth(year, month)) {
+			BuildStartTime buildStartTime = build.getBuildStartTime();
+
+			Integer buildDay = buildStartTime.getDay();
+
+			Integer lastDay = day + numberOfDays;
+
+			if (buildDay >= day && buildDay < lastDay) {
+				builds.add(build);
+			}
+		}
+
+		return builds;
+	}
+
+	@Override
+	public List<Build> getCompletedBuildsByMonth(Integer year, Integer month) {
+		return getCompletedBuildsByMonth(year, month, 1);
+	}
+
+	@Override
+	public List<Build> getCompletedBuildsByMonth(Integer year, Integer month, Integer numberOfMonths) {
+		List<Build> builds = new ArrayList<>();
+
+		for (Build build : getCompletedBuildsByYear(year)) {
+			BuildStartTime buildStartTime = build.getBuildStartTime();
+
+			Integer buildMonth = buildStartTime.getMonth();
+
+			Integer lastMonth = month + numberOfMonths;
+
+			if (buildMonth >= month && buildMonth < lastMonth) {
+				builds.add(build);
+			}
+		}
+
+		return builds;
+	}
+
+	@Override
+	public List<Build> getCompletedBuildsByYear(Integer year) {
+		List<Build> builds = new ArrayList<>();
+
+		for (Build build : getCompletedBuilds()) {
+			BuildStartTime buildStartTime = build.getBuildStartTime();
+
+			if (year.equals(buildStartTime.getYear())) {
+				builds.add(build);
+			}
+		}
+
+		return builds;
 	}
 
 	@Override
@@ -73,6 +140,7 @@ public class BaseJob implements Job {
 		return _remoteURL;
 	}
 
+	private List<Build> _completedBuilds;
 	private final String _hostName;
 	private final String _localURL;
 	private final String _jobName;

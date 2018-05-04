@@ -6,6 +6,8 @@ import java.util.regex.Pattern;
 public class BuildStartTime {
 
 	protected BuildStartTime(String id) {
+		_id = id;
+
 		Matcher matcher = _pattern.matcher(id);
 
 		if (!matcher.find()) {
@@ -20,6 +22,24 @@ public class BuildStartTime {
 		_second = Integer.valueOf(matcher.group("second"));
 	}
 
+	public Integer getDay() {
+		return _day;
+	}
+
+	public Integer getMonth() {
+		return _month;
+	}
+
+	public Integer getYear() {
+		return _year;
+	}
+
+	@Override
+	public String toString() {
+		return _id;
+	}
+
+	private final String _id;
 	private final Integer _year;
 	private final Integer _month;
 	private final Integer _day;
