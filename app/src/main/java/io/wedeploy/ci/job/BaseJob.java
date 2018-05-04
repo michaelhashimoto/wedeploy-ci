@@ -44,7 +44,10 @@ public class BaseJob implements Job {
 				continue;
 			}
 
-			System.out.println(result + "\t" + build.getRemoteURL());
+			System.out.println();
+			System.out.println(build.getRemoteURL());
+			System.out.println(build.getResult());
+			System.out.println(build.getTopLevelDuration());
 		}
 	}
 

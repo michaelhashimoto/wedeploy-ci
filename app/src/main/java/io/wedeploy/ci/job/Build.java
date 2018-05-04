@@ -10,6 +10,8 @@ public interface Build {
 
 	public Result getResult();
 
+	public BuildDuration getTopLevelDuration();
+
 	public enum Result {
 		ABORTED, FAILURE, NOT_BUILT, NOT_FOUND, SUCCESS, UNSTABLE
 	}

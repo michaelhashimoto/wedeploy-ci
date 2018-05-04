@@ -30,7 +30,8 @@ public class BaseBuild implements Build {
 		_remoteURL = "https://" + hostName + ".liferay.com/job/" + jobName + "/" + _buildNumber;
 
 		try {
-			JSONObject jsonObject = new JSONObject(CurlUtil.curl(_remoteURL + "/api/json?tree=result,duration"));
+			JSONObject jsonObject = new JSONObject(
+				CurlUtil.curl(_remoteURL + "/api/json?tree=duration,id,result"));
 
 			if (jsonObject.opt("result") != null) {
 				_result = Result.valueOf(jsonObject.getString("result"));
@@ -38,6 +39,13 @@ public class BaseBuild implements Build {
 			else {
 				_result = Result.NOT_BUILT;
 			}
+
+			if (_result == Result.NOT_BUILT) {
+				return;
+			}
+
+			_buildStartTime = new BuildStartTime(jsonObject.getString("id"));
+			_topLevelDuration = new BuildDuration(jsonObject.getInt("duration"));
 		}
 		catch (Throwable t) {
 			System.out.println(t.getMessage());
@@ -46,6 +54,11 @@ public class BaseBuild implements Build {
 
 	public BaseBuild(Job job, JSONObject buildJSONObject) {
 		this(job, buildJSONObject.getString("url"));
+	}
+
+	@Override
+	public BuildDuration getTopLevelDuration() {
+		return _topLevelDuration;
 	}
 
 	@Override
@@ -68,10 +81,12 @@ public class BaseBuild implements Build {
 		return _result;
 	}
 
+	private BuildStartTime _buildStartTime;
 	private final String _localURL;
 	private final Integer _buildNumber;
 	private final String _remoteURL;
 	private Result _result = Result.NOT_FOUND;
+	private BuildDuration _topLevelDuration;
 
 	private static Pattern _pattern = Pattern.compile(
 		"https?://[^/]+/job/[^/]+/(?<buildNumber>\\d+)/?");
