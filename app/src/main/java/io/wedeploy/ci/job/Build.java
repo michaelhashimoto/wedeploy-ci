@@ -1,12 +1,10 @@
 package io.wedeploy.ci.job;
 
-public interface Job {
+public interface Build {
 
-	public String getHostName();
+	public Integer getBuildNumber();
 
 	public String getLocalURL();
-
-	public String getJobName();
 
 	public String getRemoteURL();
 

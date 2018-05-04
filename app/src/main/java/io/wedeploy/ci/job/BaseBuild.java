@@ -5,25 +5,27 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class BaseJob implements Job {
+public class BaseBuild implements Build {
 
-	public BaseJob(String url) {
+	public BaseBuild(Job job, String url) {
 		Matcher matcher = _pattern.matcher(url);
 
 		if (!matcher.find()) {
 			throw new RuntimeException("Invalid url " + url);
 		}
 
-		_jobName = matcher.group("jobName");
-		_hostName = matcher.group("hostName");
+		_buildNumber = Integer.valueOf(matcher.group("buildNumber"));
 
-		_localURL = "http://" + _hostName + "/job/" + _jobName;
-		_remoteURL = "https://" + _hostName + ".lax.liferay.com/job/" + _jobName;
+		String hostName = job.getHostName();
+		String jobName = job.getJobName();
+
+		_localURL = "http://" + hostName + "/job/" + jobName + "/" + _buildNumber;
+		_remoteURL = "https://" + hostName + ".lax.liferay.com/job/" + jobName + "/" + _buildNumber;
 	}
 
 	@Override
-	public String getHostName() {
-		return _hostName;
+	public Integer getBuildNumber() {
+		return _buildNumber;
 	}
 
 	@Override
@@ -32,21 +34,15 @@ public class BaseJob implements Job {
 	}
 
 	@Override
-	public String getJobName() {
-		return _jobName;
-	}
-
-	@Override
 	public String getRemoteURL() {
 		return _remoteURL;
 	}
 
-	private final String _hostName;
 	private final String _localURL;
-	private final String _jobName;
+	private final Integer _buildNumber;
 	private final String _remoteURL;
 
 	private static Pattern _pattern = Pattern.compile(
-		"https?://(?<hostName>test-\\d+-\\d+)[^/]*/job/(?<jobName>[^/]+)/?");
+		"https?://[^/]+/job/[^/]+/(?<buildNumber>\\d+)/?");
 
 }
