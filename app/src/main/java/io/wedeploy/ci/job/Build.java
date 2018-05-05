@@ -17,7 +17,7 @@ public interface Build {
 	public BuildDuration getTotalDuration();
 
 	public enum Result {
-		ABORTED, FAILURE, NOT_BUILT, NOT_FOUND, SUCCESS, UNSTABLE
+		ABORTED, FAILURE, IN_PROGRESS, NOT_FOUND, SUCCESS, UNSTABLE
 	}
 
 }

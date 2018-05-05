@@ -46,7 +46,7 @@ public class BaseJob implements Job {
 
 			Build.Result result = build.getResult();
 
-			if (result == Build.Result.NOT_BUILT ||
+			if (result == Build.Result.IN_PROGRESS ||
 				result == Build.Result.NOT_FOUND) {
 
 				continue;

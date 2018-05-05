@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,7 +16,9 @@ public class BuildTime {
 		_calendar.setLenient(false);
 
 		try {
-			_calendar.setTime(_simpleDateFormat.parse(buildTime.toString()));
+			Date date = _simpleDateFormat.parse(buildTime.toString());
+
+			_calendar.setTime(date);
 		}
 		catch (ParseException pe) {
 			throw new RuntimeException(pe);
@@ -47,33 +50,17 @@ public class BuildTime {
 		_calendar.add(Calendar.YEAR, yearsToAdd);
 	}
 
+	public int compareTo(BuildTime buildTime) {
+		return _calendar.compareTo(buildTime.getCalendar());
+	}
+
 	public Calendar getCalendar() {
 		return _calendar;
-	}
-
-	public Integer getDay() {
-		return _calendar.get(Calendar.DATE);
-	}
-
-	public Integer getMonth() {
-		return _calendar.get(Calendar.MONTH);
-	}
-
-	public Integer getYear() {
-		return _calendar.get(Calendar.YEAR);
 	}
 
 	@Override
 	public String toString() {
 		return _simpleDateFormat.format(_calendar.getTime());
-	}
-
-	public String getStartOfYear() {
-		return _calendar.toString();
-	}
-
-	public int compareTo(BuildTime buildTime) {
-		return _calendar.compareTo(buildTime.getCalendar());
 	}
 
 	private final Calendar _calendar;

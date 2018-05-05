@@ -36,17 +36,16 @@ public class BaseBuild implements Build {
 		_remoteURL = "https://" + hostName + ".liferay.com/job/" + jobName + "/" + _buildNumber;
 
 		try {
-			JSONObject jsonObject = new JSONObject(
-				CurlUtil.curl(_remoteURL + "/api/json?tree=description,duration,id,result"));
+			JSONObject jsonObject = new JSONObject(CurlUtil.curl(_remoteURL + "/api/json?tree=description,duration,id,result"));
 
 			if (jsonObject.opt("result") != null) {
 				_result = Result.valueOf(jsonObject.getString("result"));
 			}
 			else {
-				_result = Result.NOT_BUILT;
+				_result = Result.IN_PROGRESS;
 			}
 
-			if (_result == Result.NOT_BUILT) {
+			if (_result == Result.IN_PROGRESS) {
 				return;
 			}
 

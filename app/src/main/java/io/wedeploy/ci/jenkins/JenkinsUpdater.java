@@ -14,7 +14,7 @@ import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
 
-public class JenkinsUpdaterJob implements Job {
+public class JenkinsUpdater implements Job {
 
 	public void execute(JobExecutionContext context)
 		throws JobExecutionException {
@@ -31,7 +31,7 @@ public class JenkinsUpdaterJob implements Job {
 
 	public static void start() throws Exception {
 		if (_scheduler == null || _scheduler.isShutdown()) {
-			JobDetail jobDetail = JobBuilder.newJob(JenkinsUpdaterJob.class)
+			JobDetail jobDetail = JobBuilder.newJob(JenkinsUpdater.class)
 				.withIdentity("jenkinsUpdater", "group")
 				.build();
 
