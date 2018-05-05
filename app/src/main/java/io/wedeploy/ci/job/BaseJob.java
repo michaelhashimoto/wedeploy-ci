@@ -3,6 +3,7 @@ package io.wedeploy.ci.job;
 import io.wedeploy.ci.util.CurlUtil;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,7 +35,7 @@ public class BaseJob implements Job {
 
 		_completedBuilds = new ArrayList<>();
 
-		JSONObject jsonObject = new JSONObject(CurlUtil.curl(_localURL + "/api/json?tree=builds[url]"));
+		JSONObject jsonObject = new JSONObject(CurlUtil.curl(_remoteURL + "/api/json?tree=builds[url]"));
 
 		JSONArray jsonArray = jsonObject.getJSONArray("builds");
 
@@ -64,21 +65,13 @@ public class BaseJob implements Job {
 
 	@Override
 	public List<Build> getCompletedBuildsByDay(Integer year, Integer month, Integer day, Integer numberOfDays) {
-		List<Build> builds = new ArrayList<>();
+		BuildTime startingBuildTime = _getStartingBuildTime(year, month, day);
 
-		for (Build build : getCompletedBuildsByMonth(year, month)) {
-			BuildStartTime buildStartTime = build.getBuildStartTime();
+		BuildTime endingBuildTime = new BuildTime(startingBuildTime);
 
-			Integer buildDay = buildStartTime.getDay();
+		endingBuildTime.addDays(numberOfDays);
 
-			Integer lastDay = day + numberOfDays;
-
-			if (buildDay >= day && buildDay < lastDay) {
-				builds.add(build);
-			}
-		}
-
-		return builds;
+		return _getCompletedBuilds(startingBuildTime, endingBuildTime);
 	}
 
 	@Override
@@ -88,36 +81,29 @@ public class BaseJob implements Job {
 
 	@Override
 	public List<Build> getCompletedBuildsByMonth(Integer year, Integer month, Integer numberOfMonths) {
-		List<Build> builds = new ArrayList<>();
+		BuildTime startingBuildTime = _getStartingBuildTime(year, month, 1);
 
-		for (Build build : getCompletedBuildsByYear(year)) {
-			BuildStartTime buildStartTime = build.getBuildStartTime();
+		BuildTime endingBuildTime = new BuildTime(startingBuildTime);
 
-			Integer buildMonth = buildStartTime.getMonth();
+		endingBuildTime.addMonths(numberOfMonths);
 
-			Integer lastMonth = month + numberOfMonths;
-
-			if (buildMonth >= month && buildMonth < lastMonth) {
-				builds.add(build);
-			}
-		}
-
-		return builds;
+		return _getCompletedBuilds(startingBuildTime, endingBuildTime);
 	}
 
 	@Override
 	public List<Build> getCompletedBuildsByYear(Integer year) {
-		List<Build> builds = new ArrayList<>();
+		return getCompletedBuildsByYear(year, 1);
+	}
 
-		for (Build build : getCompletedBuilds()) {
-			BuildStartTime buildStartTime = build.getBuildStartTime();
+	@Override
+	public List<Build> getCompletedBuildsByYear(Integer year, Integer yearsToAdd) {
+		BuildTime startingBuildTime = _getStartingBuildTime(year, Calendar.JANUARY, 1);
 
-			if (year.equals(buildStartTime.getYear())) {
-				builds.add(build);
-			}
-		}
+		BuildTime endingBuildTime = new BuildTime(startingBuildTime);
 
-		return builds;
+		endingBuildTime.addYears(yearsToAdd);
+
+		return _getCompletedBuilds(startingBuildTime, endingBuildTime);
 	}
 
 	@Override
@@ -138,6 +124,37 @@ public class BaseJob implements Job {
 	@Override
 	public String getRemoteURL() {
 		return _remoteURL;
+	}
+
+	private BuildTime _getStartingBuildTime(Integer year, Integer month, Integer day) {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(year);
+		sb.append("-");
+		sb.append(String.format("%02d", (month + 1)));
+		sb.append("-");
+		sb.append(String.format("%02d", day));
+		sb.append("_00-00-00");
+
+		return new BuildTime(sb.toString());
+	}
+
+	private List<Build> _getCompletedBuilds(
+		BuildTime startingBuildTime, BuildTime endingBuildTime) {
+
+		List<Build> builds = new ArrayList<>();
+
+		for (Build build : getCompletedBuilds()) {
+			BuildTime buildStartTime = build.getBuildStartTime();
+
+			if ((buildStartTime.compareTo(startingBuildTime) >= 0) &&
+				(buildStartTime.compareTo(endingBuildTime) <= 0)) {
+
+				builds.add(build);
+			}
+		}
+
+		return builds;
 	}
 
 	private List<Build> _completedBuilds;

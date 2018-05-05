@@ -50,7 +50,7 @@ public class BaseBuild implements Build {
 				return;
 			}
 
-			_buildStartTime = new BuildStartTime(jsonObject.getString("id"));
+			_buildStartTime = new BuildTime(jsonObject.getString("id"));
 			_topLevelDuration = new BuildDuration(jsonObject.getInt("duration"));
 
 			if (jsonObject.opt("description") == null) {
@@ -94,7 +94,7 @@ public class BaseBuild implements Build {
 	}
 
 	@Override
-	public BuildStartTime getBuildStartTime() {
+	public BuildTime getBuildStartTime() {
 		return _buildStartTime;
 	}
 
@@ -167,7 +167,7 @@ public class BaseBuild implements Build {
 		}
 	}
 
-	private BuildStartTime _buildStartTime;
+	private BuildTime _buildStartTime;
 	private final String _localURL;
 	private final Integer _buildNumber;
 	private final String _remoteURL;

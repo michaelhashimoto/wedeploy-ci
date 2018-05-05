@@ -16,6 +16,8 @@ public interface Job {
 
 	public List<Build> getCompletedBuildsByYear(Integer year);
 
+	public List<Build> getCompletedBuildsByYear(Integer year, Integer yearsToAdd);
+
 	public String getHostName();
 
 	public String getLocalURL();
