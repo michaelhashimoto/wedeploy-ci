@@ -135,7 +135,7 @@ public class JenkinsCohort {
 				.put("offline_slave_count", jenkinsCohort.getOfflineSlaveCount());
 
 			CollectionUtil.getWeDeploy()
-				.data("https://data-cimonitor.lfr.io")
+				.data("https://data-ci.lfr.io")
 				.update("cohort/" + jenkinsCohort.getID(), jsonObject)
 				.execute();
 
@@ -164,7 +164,7 @@ public class JenkinsCohort {
 			}
 
 			CollectionUtil.getWeDeploy()
-				.data("https://data-cimonitor.lfr.io")
+				.data("https://data-ci.lfr.io")
 				.create("cohort", jsonArray)
 				.execute();
 
