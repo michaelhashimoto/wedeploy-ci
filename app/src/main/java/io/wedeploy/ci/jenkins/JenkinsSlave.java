@@ -94,7 +94,7 @@ public class JenkinsSlave {
 				.put("offline_cause", jenkinsSlave.getOfflineCause());
 
 			CollectionUtil.getWeDeploy()
-				.data("https://data-ci.wedeploy.io")
+				.data("https://data-cimonitor.lfr.io")
 				.update("slave/" + jenkinsSlave.getID(), jsonObject)
 				.execute();
 
@@ -124,7 +124,7 @@ public class JenkinsSlave {
 			}
 
 			CollectionUtil.getWeDeploy()
-				.data("https://data-ci.wedeploy.io")
+				.data("https://data-cimonitor.lfr.io")
 				.create("slave", jsonArray)
 				.execute();
 

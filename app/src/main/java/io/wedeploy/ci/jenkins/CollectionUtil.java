@@ -69,28 +69,28 @@ public class CollectionUtil {
 	static {
 		try {
 			Response cohortResponse = getWeDeploy()
-				.data("https://data-ci.wedeploy.io")
+				.data("https://data-cimonitor.lfr.io")
 				.orderBy("name", SortOrder.ASCENDING)
 				.get("cohort")
 				.execute();
 			_cohortDatabaseJSONArray = new JSONArray(cohortResponse.getBody());
 
 			Response legionResponse = getWeDeploy()
-				.data("https://data-ci.wedeploy.io")
+				.data("https://data-cimonitor.lfr.io")
 				.orderBy("name", SortOrder.ASCENDING)
 				.get("legion")
 				.execute();
 			_legionDatabaseJSONArray = new JSONArray(legionResponse.getBody());
 
 			Response masterResponse = getWeDeploy()
-				.data("https://data-ci.wedeploy.io")
+				.data("https://data-cimonitor.lfr.io")
 				.orderBy("name", SortOrder.ASCENDING)
 				.get("master")
 				.execute();
 			_masterDatabaseJSONArray = new JSONArray(masterResponse.getBody());
 
 			Response slaveResponse = getWeDeploy()
-				.data("https://data-ci.wedeploy.io")
+				.data("https://data-cimonitor.lfr.io")
 				.orderBy("name", SortOrder.ASCENDING)
 				.get("slave")
 				.execute();

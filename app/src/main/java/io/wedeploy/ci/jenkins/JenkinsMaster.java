@@ -185,7 +185,7 @@ public class JenkinsMaster {
 				.put("offline_slave_count", jenkinsMaster.getOfflineSlaveCount());
 
 			CollectionUtil.getWeDeploy()
-				.data("https://data-ci.wedeploy.io")
+				.data("https://data-cimonitor.lfr.io")
 				.update("master/" + jenkinsMaster.getID(), jsonObject)
 				.execute();
 
@@ -215,7 +215,7 @@ public class JenkinsMaster {
 			}
 
 			CollectionUtil.getWeDeploy()
-				.data("https://data-ci.wedeploy.io")
+				.data("https://data-cimonitor.lfr.io")
 				.create("master", jsonArray)
 				.execute();
 

@@ -29,7 +29,7 @@ public class JenkinsLegion {
 
 	public JenkinsLegion() throws Exception {
 		Response jenkinsLegionResponse = CollectionUtil.getWeDeploy()
-			.data("https://data-ci.wedeploy.io")
+			.data("https://data-cimonitor.lfr.io")
 			.get("legion")
 			.execute();
 
@@ -161,19 +161,19 @@ public class JenkinsLegion {
 		try {
 			WeDeploy weDeploy = new WeDeploy.Builder().build();
 
-			weDeploy.data("https://data-ci.wedeploy.io")
+			weDeploy.data("https://data-cimonitor.lfr.io")
 				.delete("legion")
 				.execute();
 
-			weDeploy.data("https://data-ci.wedeploy.io")
+			weDeploy.data("https://data-cimonitor.lfr.io")
 				.delete("cohort")
 				.execute();
 
-			weDeploy.data("https://data-ci.wedeploy.io")
+			weDeploy.data("https://data-cimonitor.lfr.io")
 				.delete("master")
 				.execute();
 
-			weDeploy.data("https://data-ci.wedeploy.io")
+			weDeploy.data("https://data-cimonitor.lfr.io")
 				.delete("slave")
 				.execute();
 		}
@@ -188,7 +188,7 @@ public class JenkinsLegion {
 				.put("last_update", jenkinsLegion.getLastUpdate());
 
 			CollectionUtil.getWeDeploy()
-				.data("https://data-ci.wedeploy.io")
+				.data("https://data-cimonitor.lfr.io")
 				.update("legion/" + jenkinsLegion.getID(), jsonObject)
 				.execute();
 
@@ -214,7 +214,7 @@ public class JenkinsLegion {
 			}
 
 			CollectionUtil.getWeDeploy()
-				.data("https://data-ci.wedeploy.io")
+				.data("https://data-cimonitor.lfr.io")
 				.create("legion", jsonArray)
 				.execute();
 
@@ -249,19 +249,19 @@ public class JenkinsLegion {
 		try {
 			WeDeploy weDeploy = new WeDeploy.Builder().build();
 
-			weDeploy.data("https://data-ci.wedeploy.io")
+			weDeploy.data("https://data-cimonitor.lfr.io")
 				.delete("legion")
 				.execute();
 
-			weDeploy.data("https://data-ci.wedeploy.io")
+			weDeploy.data("https://data-cimonitor.lfr.io")
 				.delete("cohort")
 				.execute();
 
-			weDeploy.data("https://data-ci.wedeploy.io")
+			weDeploy.data("https://data-cimonitor.lfr.io")
 				.delete("master")
 				.execute();
 
-			weDeploy.data("https://data-ci.wedeploy.io")
+			weDeploy.data("https://data-cimonitor.lfr.io")
 				.delete("slave")
 				.execute();
 		}
